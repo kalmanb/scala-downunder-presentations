@@ -44,7 +44,7 @@ body {
   position: absolute;
   bottom: 0;
   padding: 0 50px 0 20px !important;
- } 
+ }
 
 /*********************************************
  * HEADERS
@@ -70,12 +70,10 @@ body {
 /*********************************************
  * Footer
  *********************************************/
-.reveal .footer {
+.footer {
   font-size: 25px;
-  z-index: 10; } 
-
-.reveal .footer a:not(.image) {
-  color: #93A1A1; 
+  z-index: 10;
+  color: #93A1A1;
   text-decoration: none;
   -webkit-transition: color .15s ease;
   -moz-transition: color .15s ease;
@@ -83,7 +81,11 @@ body {
   -o-transition: color .15s ease;
   transition: color .15s ease; }
 
-.reveal .footer a:not(.image):hover {
+.footer a {
+  color: inherit;
+  text-decoration: inherit; }
+
+.footer a:hover {
   color: #23bdc5; }
 
 
