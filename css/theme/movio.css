@@ -68,6 +68,26 @@ body {
   font-size: 80px; }
 
 /*********************************************
+ * Footer
+ *********************************************/
+.reveal .footer {
+  font-size: 25px;
+  z-index: 10; } 
+
+.reveal .footer a:not(.image) {
+  color: #fff; 
+  text-decoration: none;
+  -webkit-transition: color .15s ease;
+  -moz-transition: color .15s ease;
+  -ms-transition: color .15s ease;
+  -o-transition: color .15s ease;
+  transition: color .15s ease; }
+
+.reveal .footer a:not(.image):hover {
+  color: #23bdc5; }
+
+
+/*********************************************
  * LINKS
  *********************************************/
 .reveal a:not(.image) {
