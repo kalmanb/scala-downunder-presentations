@@ -53,6 +53,30 @@
             TBC
 					</p>
 				</section>
+			 	<section>
+           <p>
+             Actors
+           </p>
+           <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+class MyActor extends Actor{
+  def receive = {
+    case "test"            => println("received string: test")
+    case s: String         => println(s"received string: $s")
+    case Person(name, age) => println(s"received $name of who is $age years old")
+    case _                 => println("received unknown message")
+  }
+}
+           </code></pre>
+			 	</section>
+				<section>
+					<section>
+						<p>
+              Tell don't ask
+              no blocking
+              use futures
+						</p>
+					</section>
+				</section>
 
 				<section>
 					<section>
@@ -60,14 +84,206 @@
 						<p>
 						</p>
 					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Clustering</h1>
+						<p>
+            Examples from:
+            https://github.com/akka/akka/tree/master/akka-samples/akka-sample-cluster-scala
+            /src/main/scala/sample/cluster/stats/
+						</p>
+					</section>
+					<section>
+						<h1>Router with Group of routees</h1>
+						<p>
+              Router forwards messages to workers that have been created.
+						</p>
+					</section>
 					<section>
             <p>
-              tttt
+              Messages
             </p>
             <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
-            code here
+final case class StatsJob(text: String)
+final case class StatsResult(meanWordLength: Double)
+final case class JobFailed(reason: String)
             </code></pre>
 					</section>
+					<section>
+            <p>
+              Worker to count characters in each word
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+class StatsWorker extends Actor {
+  var cache = Map.empty[String, Int]
+  def receive = {
+    case word: String =>
+      val length = cache.get(word) match {
+        case Some(x) => x
+        case None =>
+          val x = word.length
+          cache += (word -> x)
+          x
+      }
+
+      sender() ! length
+  }
+}
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              StatService - recieve text, split into words, sends to workers
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+class StatsService extends Actor {
+  val workerRouter = context.actorOf(FromConfig.props(Props[StatsWorker]), name = "workerRouter")
+
+  def receive = {
+    case StatsJob(text) if text != "" ⇒
+      val words = text.split(" ")
+      val replyTo = sender() // important to not close over sender()
+      
+      // create actor that collects replies from workers
+      val aggregator = context.actorOf(Props(
+        classOf[StatsAggregator],
+        words.size,
+        replyTo))
+
+      words foreach { word ⇒
+        workerRouter.tell(
+          ConsistentHashableEnvelope(word, word), aggregator)
+      }
+  }
+}
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Aggregation - average counts from all workers
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+class StatsAggregator(expectedResults: Int, replyTo: ActorRef) extends Actor {
+  var results = IndexedSeq.empty[Int]
+  context.setReceiveTimeout(3 seconds)
+
+  def receive = {
+    case wordCount: Int ⇒
+      results = results :+ wordCount
+      if (results.size == expectedResults) {
+        val meanWordLength = results.sum.toDouble / results.size
+        replyTo ! StatsResult(meanWordLength)
+        context.stop(self)
+      }
+    case ReceiveTimeout ⇒
+      replyTo ! JobFailed("Service unavailable, try again later")
+      context.stop(self)
+  }
+}
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              So nothing cluster specific as yet
+            </p>
+					</section>
+					<section>
+            <p>
+              Cluster Config
+            </p>
+            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+akka.actor.deployment {
+  /statsService/workerRouter {
+    router = consistent-hashing-group
+    nr-of-instances = 100
+    routees.paths = ["/user/statsWorker"]
+    cluster {
+      enabled = on
+      allow-local-routees = on
+      use-role = compute
+    }
+  }
+}
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Demo
+            </p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>Router that Creates Pool</h1>
+						<p>
+              Cluster example where the router creates actors in the cluster to do work
+						</p>
+					</section>
+					<section>
+            <p>
+              Cluster Singleton Manager
+              Started on each node
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+system.actorOf(ClusterSingletonManager.props(
+  singletonProps = Props[StatsService],
+  singletonName = "statsService",
+  terminationMessage = PoisonPill,
+  role = Some("compute")),
+  name = "singleton")
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Proxy - keeps track of singleton - StatsService
+              Started on each node
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+system.actorOf(ClusterSingletonProxy.props(
+  singletonPath = "/user/singleton/statsService",
+  role = Some("compute")),
+  name = "statsServiceProxy")
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Router configuration 
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+akka.actor.deployment {
+  /singleton/statsService/workerRouter {
+    router = consistent-hashing-pool
+    nr-of-instances = 100
+    cluster {
+      enabled = on
+      max-nr-of-instances-per-node = 3
+      allow-local-routees = on
+      use-role = compute
+    }
+  }
+}
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Demo
+            </p>
+					</section>
+				</section>
+				<section>
+					<h1>TODO</h1>
+          * Clean up logging
+          * No blocking here
+          * Event Bus
+          * Scheduler
+          * Supervision
+          * Delivery Reliability
+          * Context Become
+          * Dispatchers
+          Cluster Sharding
+          Cluster Singleton
 				</section>
 				<section>
 					<h1>Thats all folks</h1>
