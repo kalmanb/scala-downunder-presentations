@@ -18,7 +18,9 @@
 		<link rel="stylesheet" href="css/theme/movio.css" id="theme">
 
 		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+    <!--<link rel="stylesheet" href="lib/css/zenburn.css">-->
+    <!--<link rel="stylesheet" href="lib/css/solarized_dark.css">-->
+<link rel="stylesheet" href="lib/css/monokai_sublime.css">
 
 		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
 		<script>
@@ -64,7 +66,7 @@
 					</section>
 					<section>
             <p>FunSuite - JUnit / NUnit
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 import org.scalatest.FunSuite
 
 class SetSuite extends FunSuite {
@@ -83,7 +85,7 @@ class SetSuite extends FunSuite {
 					</section>
 					<section>
             <p>FlatSpec</p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 import org.scalatest.FlatSpec
 
 class SetSpec extends FlatSpec {
@@ -102,7 +104,7 @@ class SetSpec extends FlatSpec {
 					</section>
 					<section>
             <p>FunSpec - RSpec like</p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 import org.scalatest.FunSpec
 
 class SetSpec extends FunSpec {
@@ -125,7 +127,7 @@ class SetSpec extends FunSpec {
 					</section>
 					<section>
             <p>WordSpec</p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 import org.scalatest.WordSpec
 
 class SetSpec extends WordSpec {
@@ -150,7 +152,7 @@ class SetSpec extends WordSpec {
             <p>
               FreeSpec - Do as you please
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 import org.scalatest.FreeSpec
 
 class SetSpec extends FreeSpec {
@@ -175,7 +177,7 @@ class SetSpec extends FreeSpec {
             <p>
               PropSpec - property based testing
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 import org.scalatest._
 import prop._
 import scala.collection.immutable._
@@ -208,7 +210,7 @@ class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
             <p>
               FeatureSpec - Given When Then
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 class TVSetSpec extends FeatureSpec with GivenWhenThen {
 
   info("As a TV set owner")
@@ -238,7 +240,7 @@ class TVSetSpec extends FeatureSpec with GivenWhenThen {
         <section>
 					<section>
             <h2>Define base classes</h2>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
             TBC
             </code></pre>
 					</section>
@@ -251,33 +253,33 @@ class TVSetSpec extends FeatureSpec with GivenWhenThen {
             <p>
              Lets get started 
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
- Assert("a” == “b”)
-            </code></pre>
-					</section>
-					<section>
-            <p>
-             Assumptions 
-            </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
-assume(database.isAvailable, "The database was down again")
-assume(database.getAllUsers.count == 9)
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+ Assert("a" == "b")
             </code></pre>
 					</section>
 					<section>
             <p>
               Cancel Tests (not fail)
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 if(! database.isAvailable)
   cancel("Can't run the test because db was not available")
             </code></pre>
 					</section>
 					<section>
             <p>
+             Assumptions - cancelled
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+assume(database.isAvailable, "The database was down again")
+assume(database.getAllUsers.count == 9)
+            </code></pre>
+					</section>
+					<section>
+            <p>
               Tagging (Slow Tests)
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 import org.scalatest.Tag
 
 object SlowTest extends Tag("com.mycompany.tags.SlowTest")
@@ -308,7 +310,7 @@ sbt
 // Exclude SlowTests
 > testOnly *ExampleSpec -- -l com.mycompany.tags.SlowTest
             </code></pre>
-
+            <br/> <br/>
             <p>Can then define a custom sbt task on run fast tests</p>
             <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
 > fastTests:test
@@ -316,7 +318,7 @@ sbt
 					</section>
 					<section>
             <p>tttt</p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 Extending withFixture - advanced TODO
             </code></pre>
 					</section>
@@ -324,7 +326,7 @@ Extending withFixture - advanced TODO
             <p>
               Before / After - (side effects)
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 class ExampleSpec extends FlatSpec with BeforeAndAfter {
 
   val builder = new StringBuilder
@@ -358,7 +360,7 @@ class ExampleSpec extends FlatSpec with BeforeAndAfter {
             <p>
               Before - No side effects
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 class ExampleSpec extends FlatSpec {
 
   trait Builder {
@@ -377,7 +379,7 @@ class ExampleSpec extends FlatSpec {
             <p>
               Multiple inputs
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 class ExampleSpec extends FlatSpec {
 
   def withFile(testCode: (File, FileWriter) => Any) {
@@ -399,12 +401,16 @@ class ExampleSpec extends FlatSpec {
 }
             </code></pre>
 					</section>
+        </section>
 				<section>
 					<section>
             <h2>Matchers</h2>
 					</section>
 					<section>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <p>
+              Equality
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 20px; margin-top: 20px;">
 result should equal (3) // can customize equality
 result should === (3)   // can customize equality and enforce type constraints
 result should be (3)    // cannot customize equality, so fastest to compile
@@ -414,9 +420,9 @@ result shouldBe 3       // cannot customize equality, so fastest to compile, no 
 					</section>
 					<section>
             <p>
-              Equals
+              Equality
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 Array(1, 2) == Array(1, 2) // yields false
 
 Array(1, 2) should equal (Array(1, 2)) // succeeds
@@ -426,7 +432,7 @@ Array(1, 2) should equal (Array(1, 2)) // succeeds
             <p>
               length / size
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 result should have length 3
 result should have size 10
             </code></pre>
@@ -435,7 +441,7 @@ result should have size 10
             <p>
               Strings
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 string should startWith ("Hello")
 string should endWith ("world")
 string should include ("seven")
@@ -445,7 +451,7 @@ string should include ("seven")
             <p>
               regex
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 string should startWith regex "Hel*o"
 string should endWith regex "wo.ld"
 string should include regex "wo.ld"
@@ -459,7 +465,7 @@ string should fullyMatch regex """(-)?(\d+)(\.\d*)?"""
             </code></pre>
 					</section>
 					<section>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 one should be < 7
 one should be > 0
 one should be <= 7
@@ -470,7 +476,7 @@ one should be >= 0
             <p>
               TBC
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 iter shouldBe 'traversableAgain
 non-empty iterator was not traversableAgain
 temp should be a 'file            // calls .isFile():Boolean
@@ -481,7 +487,7 @@ keyEvent should be an 'actionKey  // calls .isActionKey():Boolean
             <p>
               Typesafe - BePropertyMatcher
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 xs shouldBe traversableAgain     // .isTraversableAgain(): Boolean
 temp should be a file            // .isFile(): Boolean
 keyEvent should be an actionKey  // .isActionKey(): Boolean                    
@@ -491,7 +497,7 @@ keyEvent should be an actionKey  // .isActionKey(): Boolean
             <p>
               references
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 ref1 should be theSameInstanceAs ref2
             </code></pre>
 					</section>
@@ -499,7 +505,7 @@ ref1 should be theSameInstanceAs ref2
             <p>
               types
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 result1 shouldBe a [Tiger]
 result1 should not be an [Orangutan]
             </code></pre>
@@ -508,7 +514,7 @@ result1 should not be an [Orangutan]
             <p>
               ranges
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 sevenDotOh should equal (6.9 +- 0.2)
 sevenDotOh should === (6.9 +- 0.2)
 sevenDotOh should be (6.9 +- 0.2)
@@ -520,7 +526,7 @@ sevenDotOh shouldBe 6.9 +- 0.2
             <p>
               emtpy
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 traversable shouldBe empty
 javaMap should not be empty
             </code></pre>
@@ -529,7 +535,7 @@ javaMap should not be empty
             <p>
               contain
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 traversable should contain ("five")
             </code></pre>
 					</section>
@@ -537,7 +543,7 @@ traversable should contain ("five")
             <p>
               lowerCased 
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 (List("Hi", "Di", "Ho") should contain ("ho")) (after being lowerCased)
             </code></pre>
 					</section>
@@ -545,7 +551,7 @@ traversable should contain ("five")
             <p>
               oneOf
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 List(1, 2, 3, 4, 5) should contain oneOf (5, 7, 9)
 Some(7) should contain oneOf (5, 7, 9)
 "howdy" should contain oneOf ('a', 'b', 'c', 'd')
@@ -555,7 +561,7 @@ Some(7) should contain oneOf (5, 7, 9)
             <p>
               noneOf
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 List(1, 2, 3, 4, 5) should contain noneOf (7, 8, 9)
             </code></pre>
 					</section>
@@ -563,22 +569,23 @@ List(1, 2, 3, 4, 5) should contain noneOf (7, 8, 9)
             <p>
               atLeastOneOf 
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 List(1, 2, 3) should contain atLeastOneOf (2, 3, 4)
 Array(1, 2, 3) should contain atLeastOneOf (3, 4, 5)
 "abc" should contain atLeastOneOf ('c', 'a', 't')
             </code></pre>
 					</section>
 					<section>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
-(Vector(" A", "B ") should contain atLeastOneOf ("a ", "b", "c")) (after being lowerCased and trimmed)
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+(Vector(" A", "B ") should contain atLeastOneOf ("a ", "b", "c")) 
+  (after being lowerCased and trimmed)
             </code></pre>
 					</section>
 					<section>
             <p>
               atMostOneOf 
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 List(1, 2, 3, 4, 5) should contain atMostOneOf (5, 6, 7)
             </code></pre>
 					</section>
@@ -586,7 +593,7 @@ List(1, 2, 3, 4, 5) should contain atMostOneOf (5, 6, 7)
             <p>
               allOf
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 List(1, 2, 3, 4, 5) should contain allOf (2, 3, 5)
             </code></pre>
 					</section>
@@ -594,7 +601,7 @@ List(1, 2, 3, 4, 5) should contain allOf (2, 3, 5)
             <p>
               only
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 List(1, 2, 3, 2, 1) should contain only (1, 2, 3)
             </code></pre>
 					</section>
@@ -602,7 +609,7 @@ List(1, 2, 3, 2, 1) should contain only (1, 2, 3)
             <p>
               theSameElementsAs
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 List(1, 2, 2, 3, 3, 3) should contain theSameElementsAs Vector(3, 2, 3, 1, 2, 3)
             </code></pre>
 					</section>
@@ -610,7 +617,7 @@ List(1, 2, 2, 3, 3, 3) should contain theSameElementsAs Vector(3, 2, 3, 1, 2, 3)
             <p>
               inOrderOnly
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 List(1, 2, 2, 3, 3, 3) should contain inOrderOnly (1, 2, 3)
             </code></pre>
 					</section>
@@ -618,7 +625,7 @@ List(1, 2, 2, 3, 3, 3) should contain inOrderOnly (1, 2, 3)
             <p>
               inOrder
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 List(0, 1, 2, 2, 99, 3, 3, 3, 5) should contain inOrder (1, 2, 3)
             </code></pre>
 					</section>
@@ -626,7 +633,7 @@ List(0, 1, 2, 2, 99, 3, 3, 3, 5) should contain inOrder (1, 2, 3)
             <p>
               Multiple tests
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 val xs = List(1, 2, 3)
 forAll (xs) { x => x should be < 10 }
 
@@ -637,7 +644,7 @@ all (xs) should be < 10
             <p>
               and
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 map should (contain key ("two") and not contain value (7))
             </code></pre>
 					</section>
@@ -645,7 +652,7 @@ map should (contain key ("two") and not contain value (7))
             <p>
               and or
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 number should (be > (0) and be <= (10))
 option should (equal (Some(List(1, 2, 3))) or be (None))
 string should (
@@ -660,7 +667,7 @@ string should (
             <p>
               Mixing conditions
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 traversable should ((contain (7) or contain (8)) and have size (9))
 traversable should (contain (7) or (contain (8) and have size (9)))
             </code></pre>
@@ -669,7 +676,7 @@ traversable should (contain (7) or (contain (8) and have size (9)))
             <p>
               Testing contents of classes
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 case class Book(title: String, author: List[String], pubYear: Int)
 
 // includes get, is, public
@@ -684,7 +691,7 @@ book should have (
             <p>
               Custom Matchers
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 // Standard
 file.getName should endWith (".txt")
 
@@ -700,7 +707,7 @@ Implementation: http://www.scalatest.org/user_guide/using_matchers
             <p>
               Exceptions
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 an [IndexOutOfBoundsException] should be thrownBy s.charAt(-1)
             </code></pre>
 					</section>
@@ -708,13 +715,13 @@ an [IndexOutOfBoundsException] should be thrownBy s.charAt(-1)
             <p>
               Exception messages
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 val thrown = the [IndexOutOfBoundsException] thrownBy s.charAt(-1)
 thrown.getMessage should equal ("String index out of range: -1")
             </code></pre>
 					</section>
 					<section>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 the [ArithmeticException] thrownBy 1 / 0 should have message "/ by zero"
 the [IndexOutOfBoundsException] thrownBy {
   s.charAt(-1)
@@ -725,7 +732,7 @@ the [IndexOutOfBoundsException] thrownBy {
             <p>
               MockitoSugar 
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 // First, create the mock object
 val mockCollaborator = mock[Collaborator]
 
@@ -746,7 +753,7 @@ verify(mockCollaborator, times(2)).documentChanged("Document")
             <p>
               Inside
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 // For example, given the following case classes:
 case class Address(street: String, city: String, state: String, zip: String)
 case class Name(first: String, middle: String, last: String)
@@ -770,36 +777,162 @@ inside (rec) { case Record(name, address, age) =>
             </code></pre>
 					</section>
 					<section>
-            <p>tttt</p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <p>
+              StreamlinedXml 
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+(xmlElem === <summer>
+  <day></day>
+  <night>
+    with lots of stars
+  </night>
+</summer>) (after being streamlined[Elem])
+            </code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+            <h2>Scalactic</h2>
+					</section>
+					<section>
+            <p>
+              Nice equality 
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+import org.scalactic._
+import TripleEquals._
+import StringNormalizations._
+import Explicitly._
+
+("Hello" === "hello") (after being lowerCased) // true
             </code></pre>
 					</section>
 					<section>
-            <p>tttt</p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <p>
+              Normalization
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+import NormMethods._
+
+implicit val strNormalization = lowerCased
+
+"WHISPER".norm                                // "whisper"
+"WHISPER".norm === "whisper"                  // true
             </code></pre>
 					</section>
+					<section>
+            <p>
+              Implicit string equality
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+implicit val strEquality = decided by defaultEquality[String] afterBeing lowerCased
 
+"Hello" === "hello"                           // true
+"normalized" === "NORMALIZED"                 // true
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Tolerance
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+import Tolerance._
 
-				</section>
-				<section>
-					<h2>Clever Quotes</h2>
-					<p>
-						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;The nice thing about standards is that there are so many to choose from&rdquo;</q> and block:
-					</p>
-					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
-						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
-					</blockquote>
-				</section>
+2.00001 === 2.0 +- 0.01                       // true
+            </code></pre>
 
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+import TolerantNumerics._
+
+implicit val dblEquality = tolerantDoubleEquality(0.01)
+
+2.00001 === 2.0                               // true
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Type checked ===
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+ import TypeCheckedTripleEquals._
+
+ Some("hi") === "hi"
+ error: types Some[String] and String do not adhere to the type constraint
+ selected for the === and !== operators; the missing implicit parameter is
+ of type org.scalactic.Constraint[Some[String],String]
+           Some("hi") === "hi"
+                      ^
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Or and Every
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 20px; margin-top: 20px;">
+case class Person(name: String, age: Int)
+
+def parseName(input: String): String Or One[ErrorMessage] = {
+  val trimmed = input.trim
+  if (!trimmed.isEmpty)
+    Good(trimmed)
+  else
+    Bad(One(s""""${input}" is not a valid name"""))
+}
+
+def parseAge(input: String): Int Or One[ErrorMessage] = {
+  try {
+    val age = input.trim.toInt
+    if (age >= 0) Good(age) else Bad(One(s""""${age}" is not a valid age"""))
+  }
+  catch {
+    case _: NumberFormatException =>
+      Bad(One(s""""${input}" is not a valid integer"""))
+  }
+}
+
+def parsePerson(inputName: String, inputAge: String): Person Or Every[ErrorMessage] = {
+
+  val name = parseName(inputName)
+  val age = parseAge(inputAge)
+  withGood(name, age) { Person(_, _) }
+}
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Using parsePerson 
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+parsePerson("Bridget Jones", "29")
+// Result: Good(Person(Bridget Jones,29))
+
+parsePerson("Bridget Jones", "")
+// Result: Bad(One("" is not a valid integer))
+
+parsePerson("Bridget Jones", "-29")
+// Result: Bad(One("-29" is not a valid age))
+
+parsePerson("", "")
+// Result: Bad(Many("" is not a valid name, "" is not a valid integer))
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Snapshots - easy logging
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+val a = 1
+val b = '2'
+val c = "3"
+
+snap(a, b, c) // Result: a was 1, b was '2', c was "3"
+            </code></pre>
+          </section>
+        </section>
 				<section>
 					<h1>Thats all folks</h1>
 				</section>
-
 			</div>
-
 		</div>
 
 		<div class="footer" style="position: absolute; bottom: 30px; left: 25px;">
@@ -827,7 +960,7 @@ inside (rec) { case Record(name, address, age) =>
 				center: true,
 
 				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-				transition: Reveal.getQueryHash().transition || 'cube', // default/cube/page/concave/zoom/linear/fade/none
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
 				// Parallax scrolling
 				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
@@ -838,7 +971,11 @@ inside (rec) { case Record(name, address, age) =>
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
 					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/highlight/highlight.pack.js', async: true, callback: function() { 
+            hljs.configure({
+            
+            })
+            hljs.initHighlightingOnLoad(); } },
 					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
 					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]
