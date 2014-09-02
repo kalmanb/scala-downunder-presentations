@@ -47,18 +47,25 @@
 					<h1>Intro to Akka</h1>
 				</section>
 
-				<section>
-					<h1>Anatomy of an Actor</h1>
-					<p>
-            TBC
-					</p>
-				</section>
-			 	<section>
-           <p>
-             Actors
-           </p>
-           <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
-class MyActor extends Actor{
+			  <section>
+			    <section data-markdown>
+            <script type="text/template">
+#Anatomy of an Actor
+
+IMG
+            </script>
+			    </section>
+			    <section data-markdown>
+            <script type="text/template">
+* Mailbox
+* Single Threaded
+* Can maintain state
+* Untyped
+            </script>
+			    </section>
+			   	<section>
+             <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+class MyActor extends Actor {
   def receive = {
     case "test"            => println("received string: test")
     case s: String         => println(s"received string: $s")
@@ -66,35 +73,96 @@ class MyActor extends Actor{
     case _                 => println("received unknown message")
   }
 }
-           </code></pre>
-			 	</section>
+             </code></pre>
+			   	</section>
+					<section>
+            <p>
+              Don't block actors
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+class BlockingExample extends Actor {
+
+  def receive = {
+    case 'Request ⇒
+      Try {
+        DB.selectQuery("select * from person;")
+      } match {
+        case Success(person) ⇒ println(s"Person is $person")
+        case Failure(e)      ⇒ println(s"oh no: $e")
+      }
+      context stop self
+  }
+}
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Ask Example
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+class AskExample(otherActor: ActorRef) extends Actor {
+  implicit val dispatcher = context.dispatcher
+  implicit val timeout = Timeout(5 seconds)
+
+  def receive = { 
+    case 'Request ⇒
+      val result: Future[Person] = (otherActor ? "select * from person;").mapTo[Person]
+      result.onComplete {
+        case Success(person) ⇒ println(s"Person is $person")
+        case Failure(e)      ⇒ println(s"oh no: $e")
+      }   
+      context stop self
+  }
+}
+            </code></pre>
+          </section>
+					<section>
+            <p>
+              Tell Example
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+class TellExample(otherActor: ActorRef) extends Actor {
+
+  implicit val dispatcher = context.dispatcher
+
+  def receive = { 
+    case 'Request ⇒
+      otherActor ! "select * from person;"
+      context become waitingResponse
+      // Schedule timeout
+      context.system.scheduler.scheduleOnce(5 seconds, self, new Exception("timed out"))
+  }
+
+  def waitingResponse: Receive = { 
+    case person: Person ⇒
+      println(s"Person is $person")
+      context stop self
+    case e ⇒ 
+      println(s"oh no: $e")
+      context stop self
+  }
+}
+            </code></pre>
+					</section>
+        </section>
 				<section>
 					<section>
-						<p>
-              Tell don't ask
-              no blocking
-              use futures
-						</p>
+						<h1>Pull / Push Demos</h1>
+            <p>
+            </p>
 					</section>
 				</section>
 
 				<section>
-					<section>
-						<h1>Demo</h1>
-						<p>
-						</p>
-					</section>
-				</section>
+			    <section data-markdown>
+            <script type="text/template">
+#Clustering
 
-				<section>
-					<section>
-						<h1>Clustering</h1>
-						<p>
-            Examples from:
-            https://github.com/akka/akka/tree/master/akka-samples/akka-sample-cluster-scala
-            /src/main/scala/sample/cluster/stats/
-						</p>
-					</section>
+* Examples from:
+* https://github.com/akka/akka/tree/master/akka-samples/akka-sample-cluster-scala
+* /src/main/scala/sample/cluster/stats/
+            </script>
+			    </section>
 					<section>
 						<h1>Router with Group of routees</h1>
 						<p>
@@ -139,7 +207,8 @@ class StatsWorker extends Actor {
             </p>
             <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 class StatsService extends Actor {
-  val workerRouter = context.actorOf(FromConfig.props(Props[StatsWorker]), name = "workerRouter")
+  val workerRouter = context.actorOf(FromConfig.props(Props[StatsWorker]),
+    name = "workerRouter")
 
   def receive = {
     case StatsJob(text) if text != "" ⇒
@@ -282,6 +351,7 @@ akka.actor.deployment {
           * Delivery Reliability
           * Context Become
           * Dispatchers
+          * Tell don't ask examples
           Cluster Sharding
           Cluster Singleton
 				</section>
