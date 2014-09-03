@@ -77,7 +77,7 @@ class MyActor extends Actor {
 			   	</section>
 					<section>
             <p>
-              Don't block actors
+              Don't block actors - (full mail boxes)
             </p>
             <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
 class BlockingExample extends Actor {
@@ -145,6 +145,70 @@ class TellExample(otherActor: ActorRef) extends Actor {
             </code></pre>
 					</section>
         </section>
+				<section>
+					<section>
+						<h1>Routing</h1>
+            <p>
+            </p>
+					</section>
+					<section>
+            <img src="img/router.png" border="0"/>
+					</section>
+					<section>
+            <script type="text/template">
+### Router Types
+* Round Robin
+* Random
+* Smallest Mailbox
+* Balancing Pool - shared mailbox
+* Broadcast
+* Scatter Gather First
+* Tail Chopping
+* Consisent Hashing
+* BYO
+            </script>
+					</section>
+					<section>
+            <p>
+              Example
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+akka.actor.deployment {
+  /parent/router1 {
+    router = round-robin-pool
+    nr-of-instances = 5
+  }
+}
+            </code></pre>
+            <p></p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+val router: ActorRef = context.actorOf(FromConfig.props(Props[Worker]), "router1")
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Resizable
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+akka.actor.deployment {
+  /parent/router1 {
+    router = round-robin-pool
+    resizer {
+      lower-bound = 2
+      upper-bound = 15
+      messages-per-resize = 100
+    }
+  }
+}
+            </code></pre>
+					</section>
+					<section>
+            <script type="text/template">
+### Cool Stuff
+* BYO
+            </script>
+					</section>
+				</section>
 				<section>
 					<section>
 						<h1>Pull / Push Demos</h1>
@@ -342,21 +406,84 @@ akka.actor.deployment {
 					</section>
 				</section>
 				<section>
-					<h1>TODO</h1>
-          * Clean up logging
-          * No blocking here
-          * Event Bus
-          * Scheduler
-          * Supervision
-          * Delivery Reliability
-          * Context Become
-          * Dispatchers
-          * Tell don't ask examples
-          Cluster Sharding
-          Cluster Singleton
+					<section>
+            <p>
+              Event Bus 
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+class AppActorEventBus extends ActorEventBus with LookupClassification {
+
+  ...
+
+  protected def classify(event: Event): Classifier = {
+    event.channel
+  }
+
+  protected def publish(event: Event, subscriber: Subscriber): Unit = {
+    subscriber ! event
+  }
+}
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Subscribe to Events 
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+val system = ActorSystem("MySystem")
+val appActorEventBus = new AppActorEventBus
+
+val subscriber = system.actorOf(Props(new Actor {
+  def receive = {
+    case event: MessageEvent ⇒ println(event.message)
+  }
+}))
+
+appActorEventBus.subscribe(subscriber, "/posts/new")
+appActorEventBus.publish(MessageEvent("/posts/new", "hello world"))
+            </code></pre>
+					</section>
+					<section>
+            <p>
+              Demo
+            </p>
+					</section>
+				<section>
+				<section>
+					<section>
+            <h1>Movio Email Delivery</h1>
+            <p>PULLIING it all together</p>
+					</section>
+					<section>
+            IMG
+					</section>
 				</section>
 				<section>
-					<h1>Thats all folks</h1>
+					<section>
+            <script type="text/template">
+# Supervision
+
+* Supervisor = parent
+* One for one
+* All for one
+            </script>
+					</section>
+				</section>
+				<section>
+					<h1>TODO</h1>
+          * Clean up logging
+          * Clean up vim colours
+          * Supervision
+          * Delivery Reliability
+          * Dispatchers
+				</section>
+				<section>
+					<h1>Next Steps</h1>
+          <p>
+            http://akka.io/ - best documentation
+            Code examples:
+            https://github.com/kalmanb/akka-examples
+          </p>
 				</section>
 			</div>
 		</div>
