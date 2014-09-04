@@ -242,9 +242,9 @@ akka.actor.deployment {
             </script>
 			    </section>
 					<section>
-						<h1>Router with Group of routees</h1>
+						<h1>Router that Creates Pool</h1>
 						<p>
-              Router forwards messages to workers that have been created.
+              Cluster example where the router creates actors in the cluster to do work
 						</p>
 					</section>
 					<section>
@@ -335,38 +335,6 @@ class StatsAggregator(expectedResults: Int, replyTo: ActorRef) extends Actor {
             <p>
               So nothing cluster specific as yet
             </p>
-					</section>
-					<section>
-            <p>
-              Cluster Config
-            </p>
-            <pre><code data-trim contenteditable >
-akka.actor.deployment {
-  /statsService/workerRouter {
-    router = consistent-hashing-group
-    nr-of-instances = 100
-    routees.paths = ["/user/statsWorker"]
-    cluster {
-      enabled = on
-      allow-local-routees = on
-      use-role = compute
-    }
-  }
-}
-            </code></pre>
-					</section>
-					<section>
-            <h1>
-              Demo
-            </h1>
-					</section>
-				</section>
-				<section>
-					<section>
-						<h1>Router that Creates Pool</h1>
-						<p>
-              Cluster example where the router creates actors in the cluster to do work
-						</p>
 					</section>
 					<section>
             <p>
