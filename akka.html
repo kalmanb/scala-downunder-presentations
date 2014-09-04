@@ -48,12 +48,11 @@
 				</section>
 
 			  <section>
-			    <section data-markdown>
-            <script type="text/template">
-#Anatomy of an Actor
-
-IMG
-            </script>
+			    <section>
+            <h1>Anatomy of an Actor</h1>
+			    </section>
+			    <section>
+            <img src="img/actor.png" width="800" border="0"/>
 			    </section>
 			    <section data-markdown>
             <script type="text/template">
@@ -75,6 +74,25 @@ class MyActor extends Actor {
 }
              </code></pre>
 			   	</section>
+					<section>
+            <p>
+              Interacting with Actors
+            </p>
+            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+val myActor = system.actorOf(Props(new MyActor(constructorParam)))
+
+// Tell
+myActor ! "test"              // Send string 
+myActor ! "any string"        // Send string
+myActor ! Person("kal", 37)   // Send Person
+
+
+// Ask
+implicit val timeout = Timeout(5 seconds)
+
+val person: Future[Person] = (myActor ? "select * from person;").mapTo[Person]
+            </code></pre>
+					</section>
 					<section>
             <p>
               Don't block actors - (full mail boxes)
@@ -154,7 +172,7 @@ class TellExample(otherActor: ActorRef) extends Actor {
 					<section>
             <img src="img/router.png" border="0"/>
 					</section>
-					<section>
+			    <section data-markdown>
             <script type="text/template">
 ### Router Types
 * Round Robin
@@ -202,7 +220,7 @@ akka.actor.deployment {
 }
             </code></pre>
 					</section>
-					<section>
+					<section data-markdown>
             <script type="text/template">
 ### Cool Stuff
 * BYO
@@ -342,9 +360,9 @@ akka.actor.deployment {
             </code></pre>
 					</section>
 					<section>
-            <p>
+            <h1>
               Demo
-            </p>
+            </h1>
 					</section>
 				</section>
 				<section>
@@ -400,12 +418,17 @@ akka.actor.deployment {
             </code></pre>
 					</section>
 					<section>
-            <p>
+            <h1>
               Demo
-            </p>
+            </h1>
 					</section>
 				</section>
 				<section>
+					<section>
+            <h1>
+              Other Cool Stuff
+            </h1>
+					</section>
 					<section>
             <p>
               Event Bus 
@@ -444,22 +467,22 @@ appActorEventBus.publish(MessageEvent("/posts/new", "hello world"))
             </code></pre>
 					</section>
 					<section>
-            <p>
+            <h1>
               Demo
-            </p>
+            </h1>
 					</section>
-				<section>
+				</section>
 				<section>
 					<section>
             <h1>Movio Email Delivery</h1>
             <p>PULLIING it all together</p>
 					</section>
-					<section>
-            IMG
-					</section>
+          <section>
+            <img src="img/movio-actors.png" width="1000" border="0"/>
+          </section>
 				</section>
 				<section>
-					<section>
+					<section data-markdown>
             <script type="text/template">
 # Supervision
 
@@ -477,13 +500,12 @@ appActorEventBus.publish(MessageEvent("/posts/new", "hello world"))
           * Delivery Reliability
           * Dispatchers
 				</section>
-				<section>
-					<h1>Next Steps</h1>
-          <p>
-            http://akka.io/ - best documentation
-            Code examples:
-            https://github.com/kalmanb/akka-examples
-          </p>
+				<section data-markdown>
+            <script type="text/template">
+# Next Steps
+* http://akka.io/ - best documentation
+* https://github.com/kalmanb/akka-examples
+            </script>
 				</section>
 			</div>
 		</div>
