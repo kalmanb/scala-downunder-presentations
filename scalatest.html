@@ -14,7 +14,8 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=no">
 
-		<link rel="stylesheet" href="css/reveal.min.css">
+		<!--<link rel="stylesheet" href="css/reveal.min.css">-->
+		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/movio.css" id="theme">
 
 		<!-- For syntax highlighting -->
@@ -50,8 +51,31 @@
 				<section>
 					<h1>Intro</h1>
 					<p>
-            TBC
+            ...
 					</p>
+				</section>
+
+				<section>
+					<h1>Java Integration</h1>
+          <pre><code data-trim contenteditable class="scala" >
+&lt;project&gt;
+  ...
+  &lt;build&gt;
+    &lt;sourceDirectory&gt;src/main/scala&lt;/sourceDirectory&gt;
+    &lt;testSourceDirectory&gt;src/test/scala&lt;/testSourceDirectory&gt;
+    ...
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;net.alchim31.maven&lt;/groupId&gt;
+        &lt;artifactId&gt;scala-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.2.0&lt;/version&gt;
+        &lt;configuration&gt;
+          &lt;recompileMode&gt;incremental&lt;/recompileMode&gt;
+          &lt;useZincServer&gt;true&lt;/useZincServer&gt;
+        &lt;/configuration&gt;
+      &lt;plugin&gt;
+      ...
+          </code></pre>
 				</section>
 
 				<section>
@@ -66,7 +90,7 @@
 					</section>
 					<section>
             <p>FunSuite - JUnit / NUnit
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import org.scalatest.FunSuite
 
 class SetSuite extends FunSuite {
@@ -85,7 +109,7 @@ class SetSuite extends FunSuite {
 					</section>
 					<section>
             <p>FlatSpec</p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import org.scalatest.FlatSpec
 
 class SetSpec extends FlatSpec {
@@ -104,7 +128,7 @@ class SetSpec extends FlatSpec {
 					</section>
 					<section>
             <p>FunSpec - RSpec like</p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import org.scalatest.FunSpec
 
 class SetSpec extends FunSpec {
@@ -127,7 +151,7 @@ class SetSpec extends FunSpec {
 					</section>
 					<section>
             <p>WordSpec</p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import org.scalatest.WordSpec
 
 class SetSpec extends WordSpec {
@@ -152,7 +176,7 @@ class SetSpec extends WordSpec {
             <p>
               FreeSpec - Do as you please
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import org.scalatest.FreeSpec
 
 class SetSpec extends FreeSpec {
@@ -177,20 +201,18 @@ class SetSpec extends FreeSpec {
             <p>
               PropSpec - property based testing
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import org.scalatest._
 import prop._
 import scala.collection.immutable._
 
 class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
-
   val examples =
     Table(
       "set",
       BitSet.empty,
       HashSet.empty[Int],
-      TreeSet.empty[Int]
-    )
+      TreeSet.empty[Int])
 
   property("an empty Set should have size 0") {
     forAll(examples) { set =>
@@ -210,7 +232,7 @@ class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
             <p>
               FeatureSpec - Given When Then
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 class TVSetSpec extends FeatureSpec with GivenWhenThen {
 
   info("As a TV set owner")
@@ -240,8 +262,15 @@ class TVSetSpec extends FeatureSpec with GivenWhenThen {
         <section>
 					<section>
             <h2>Define base classes</h2>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
-            TBC
+            <pre><code data-trim contenteditable class="scala" >
+trait MovioSpec extends FunSpecLike
+    with ShouldMatchers
+    with OptionValues
+    with EitherValues
+    with BeforeAndAfter
+    with BeforeAndAfterEach
+    with BeforeAndAfterAll
+    with UtcTime 
             </code></pre>
 					</section>
         </section>
@@ -253,15 +282,18 @@ class TVSetSpec extends FeatureSpec with GivenWhenThen {
             <p>
              Lets get started 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
- Assert("a" == "b")
+            <pre><code data-trim contenteditable class="scala" >
+ Assert("abcd" == "abe")   // org.scalatest.exceptions.TestFailedException
+            </code></pre>
+            <pre><code data-trim contenteditable class="scala" >
+ Assert("abcd" === "abe") // "ab[cd]" did not equal "ab[e]"
             </code></pre>
 					</section>
 					<section>
             <p>
               Cancel Tests (not fail)
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 if(! database.isAvailable)
   cancel("Can't run the test because db was not available")
             </code></pre>
@@ -270,7 +302,7 @@ if(! database.isAvailable)
             <p>
              Assumptions - cancelled
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 assume(database.isAvailable, "The database was down again")
 assume(database.getAllUsers.count == 9)
             </code></pre>
@@ -279,7 +311,7 @@ assume(database.getAllUsers.count == 9)
             <p>
               Tagging (Slow Tests)
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import org.scalatest.Tag
 
 object SlowTest extends Tag("com.mycompany.tags.SlowTest")
@@ -305,32 +337,25 @@ class ExampleSpec extends FlatSpec {
             <p>
               SBT exclude Tags
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable >
 sbt
 // Exclude SlowTests
 > testOnly *ExampleSpec -- -l com.mycompany.tags.SlowTest
             </code></pre>
             <br/> <br/>
             <p>Can then define a custom sbt task on run fast tests</p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable >
 > fastTests:test
-            </code></pre>
-					</section>
-					<section>
-            <p>tttt</p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
-Extending withFixture - advanced TODO
             </code></pre>
 					</section>
 					<section>
             <p>
               Before / After - (side effects)
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 class ExampleSpec extends FlatSpec with BeforeAndAfter {
 
   val builder = new StringBuilder
-  val buffer = new ListBuffer[String]
 
   before {
     builder.append("ScalaTest is ")
@@ -338,20 +363,11 @@ class ExampleSpec extends FlatSpec with BeforeAndAfter {
 
   after {
     builder.clear()
-    buffer.clear()
   }
 
   "Testing" should "be easy" in {
     builder.append("easy!")
     assert(builder.toString === "ScalaTest is easy!")
-    assert(buffer.isEmpty)
-    buffer += "sweet"
-  }
-
-  it should "be fun" in {
-    builder.append("fun!")
-    assert(builder.toString === "ScalaTest is fun!")
-    assert(buffer.isEmpty)
   }
 }
             </code></pre>
@@ -360,7 +376,7 @@ class ExampleSpec extends FlatSpec with BeforeAndAfter {
             <p>
               Before - No side effects
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 class ExampleSpec extends FlatSpec {
 
   trait Builder {
@@ -379,7 +395,7 @@ class ExampleSpec extends FlatSpec {
             <p>
               Multiple inputs
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 class ExampleSpec extends FlatSpec {
 
   def withFile(testCode: (File, FileWriter) => Any) {
@@ -410,7 +426,7 @@ class ExampleSpec extends FlatSpec {
             <p>
               Equality
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 20px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 result should equal (3) // can customize equality
 result should === (3)   // can customize equality and enforce type constraints
 result should be (3)    // cannot customize equality, so fastest to compile
@@ -422,7 +438,7 @@ result shouldBe 3       // cannot customize equality, so fastest to compile, no 
             <p>
               Equality
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 Array(1, 2) == Array(1, 2) // yields false
 
 Array(1, 2) should equal (Array(1, 2)) // succeeds
@@ -432,7 +448,7 @@ Array(1, 2) should equal (Array(1, 2)) // succeeds
             <p>
               length / size
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 result should have length 3
 result should have size 10
             </code></pre>
@@ -441,7 +457,7 @@ result should have size 10
             <p>
               Strings
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 string should startWith ("Hello")
 string should endWith ("world")
 string should include ("seven")
@@ -451,7 +467,7 @@ string should include ("seven")
             <p>
               regex
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 string should startWith regex "Hel*o"
 string should endWith regex "wo.ld"
 string should include regex "wo.ld"
@@ -465,7 +481,7 @@ string should fullyMatch regex """(-)?(\d+)(\.\d*)?"""
             </code></pre>
 					</section>
 					<section>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 one should be < 7
 one should be > 0
 one should be <= 7
@@ -474,30 +490,35 @@ one should be >= 0
 					</section>
 					<section>
             <p>
-              TBC
+              Boolean with be (reflection)
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
-iter shouldBe 'traversableAgain
-non-empty iterator was not traversableAgain
-temp should be a 'file            // calls .isFile():Boolean
-keyEvent should be an 'actionKey  // calls .isActionKey():Boolean
+            <pre><code data-trim contenteditable class="scala" >
+temp should be a 'file            // calls temp.isFile():Boolean
+keyEvent should be an 'actionKey  // calls keyEvent.isActionKey():Boolean
             </code></pre>
 					</section>
 					<section>
             <p>
               Typesafe - BePropertyMatcher
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
-xs shouldBe traversableAgain     // .isTraversableAgain(): Boolean
-temp should be a file            // .isFile(): Boolean
-keyEvent should be an actionKey  // .isActionKey(): Boolean                    
+            <pre><code data-trim contenteditable class="scala" >
+class FileBePropertyMatcher extends BePropertyMatcher[java.io.File] {
+  def apply(left: java.io.File) = BePropertyMatchResult(left.isFile, "file")
+}
+
+val file = new FileBePropertyMatcher
+            </code></pre>
+            <pre><code data-trim contenteditable class="scala" >
+temp should be a file            // temp.isFile(): Boolean
+xs shouldBe traversableAgain     // xs.isTraversableAgain(): Boolean
+keyEvent should be an actionKey  // keyEvent.isActionKey(): Boolean                    
             </code></pre>
 					</section>
 					<section>
             <p>
               references
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 ref1 should be theSameInstanceAs ref2
             </code></pre>
 					</section>
@@ -505,7 +526,7 @@ ref1 should be theSameInstanceAs ref2
             <p>
               types
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 result1 shouldBe a [Tiger]
 result1 should not be an [Orangutan]
             </code></pre>
@@ -514,7 +535,7 @@ result1 should not be an [Orangutan]
             <p>
               ranges
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 sevenDotOh should equal (6.9 +- 0.2)
 sevenDotOh should === (6.9 +- 0.2)
 sevenDotOh should be (6.9 +- 0.2)
@@ -526,7 +547,7 @@ sevenDotOh shouldBe 6.9 +- 0.2
             <p>
               emtpy
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 traversable shouldBe empty
 javaMap should not be empty
             </code></pre>
@@ -535,7 +556,7 @@ javaMap should not be empty
             <p>
               contain
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 traversable should contain ("five")
             </code></pre>
 					</section>
@@ -543,7 +564,7 @@ traversable should contain ("five")
             <p>
               lowerCased 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 (List("Hi", "Di", "Ho") should contain ("ho")) (after being lowerCased)
             </code></pre>
 					</section>
@@ -551,7 +572,7 @@ traversable should contain ("five")
             <p>
               oneOf
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 List(1, 2, 3, 4, 5) should contain oneOf (5, 7, 9)
 Some(7) should contain oneOf (5, 7, 9)
 "howdy" should contain oneOf ('a', 'b', 'c', 'd')
@@ -561,7 +582,7 @@ Some(7) should contain oneOf (5, 7, 9)
             <p>
               noneOf
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 List(1, 2, 3, 4, 5) should contain noneOf (7, 8, 9)
             </code></pre>
 					</section>
@@ -569,14 +590,14 @@ List(1, 2, 3, 4, 5) should contain noneOf (7, 8, 9)
             <p>
               atLeastOneOf 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 List(1, 2, 3) should contain atLeastOneOf (2, 3, 4)
 Array(1, 2, 3) should contain atLeastOneOf (3, 4, 5)
 "abc" should contain atLeastOneOf ('c', 'a', 't')
             </code></pre>
 					</section>
 					<section>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 (Vector(" A", "B ") should contain atLeastOneOf ("a ", "b", "c")) 
   (after being lowerCased and trimmed)
             </code></pre>
@@ -585,7 +606,7 @@ Array(1, 2, 3) should contain atLeastOneOf (3, 4, 5)
             <p>
               atMostOneOf 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 List(1, 2, 3, 4, 5) should contain atMostOneOf (5, 6, 7)
             </code></pre>
 					</section>
@@ -593,7 +614,7 @@ List(1, 2, 3, 4, 5) should contain atMostOneOf (5, 6, 7)
             <p>
               allOf
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 List(1, 2, 3, 4, 5) should contain allOf (2, 3, 5)
             </code></pre>
 					</section>
@@ -601,7 +622,7 @@ List(1, 2, 3, 4, 5) should contain allOf (2, 3, 5)
             <p>
               only
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 List(1, 2, 3, 2, 1) should contain only (1, 2, 3)
             </code></pre>
 					</section>
@@ -609,7 +630,7 @@ List(1, 2, 3, 2, 1) should contain only (1, 2, 3)
             <p>
               theSameElementsAs
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 List(1, 2, 2, 3, 3, 3) should contain theSameElementsAs Vector(3, 2, 3, 1, 2, 3)
             </code></pre>
 					</section>
@@ -617,7 +638,7 @@ List(1, 2, 2, 3, 3, 3) should contain theSameElementsAs Vector(3, 2, 3, 1, 2, 3)
             <p>
               inOrderOnly
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 List(1, 2, 2, 3, 3, 3) should contain inOrderOnly (1, 2, 3)
             </code></pre>
 					</section>
@@ -625,7 +646,7 @@ List(1, 2, 2, 3, 3, 3) should contain inOrderOnly (1, 2, 3)
             <p>
               inOrder
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 List(0, 1, 2, 2, 99, 3, 3, 3, 5) should contain inOrder (1, 2, 3)
             </code></pre>
 					</section>
@@ -633,7 +654,7 @@ List(0, 1, 2, 2, 99, 3, 3, 3, 5) should contain inOrder (1, 2, 3)
             <p>
               Multiple tests
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 val xs = List(1, 2, 3)
 forAll (xs) { x => x should be < 10 }
 
@@ -644,7 +665,7 @@ all (xs) should be < 10
             <p>
               and
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 map should (contain key ("two") and not contain value (7))
             </code></pre>
 					</section>
@@ -652,7 +673,7 @@ map should (contain key ("two") and not contain value (7))
             <p>
               and or
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 number should (be > (0) and be <= (10))
 option should (equal (Some(List(1, 2, 3))) or be (None))
 string should (
@@ -667,7 +688,7 @@ string should (
             <p>
               Mixing conditions
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 traversable should ((contain (7) or contain (8)) and have size (9))
 traversable should (contain (7) or (contain (8) and have size (9)))
             </code></pre>
@@ -676,7 +697,7 @@ traversable should (contain (7) or (contain (8) and have size (9)))
             <p>
               Testing contents of classes
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 case class Book(title: String, author: List[String], pubYear: Int)
 
 // includes get, is, public
@@ -691,7 +712,7 @@ book should have (
             <p>
               Custom Matchers
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 // Standard
 file.getName should endWith (".txt")
 
@@ -707,7 +728,7 @@ Implementation: http://www.scalatest.org/user_guide/using_matchers
             <p>
               Exceptions
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 an [IndexOutOfBoundsException] should be thrownBy s.charAt(-1)
             </code></pre>
 					</section>
@@ -715,13 +736,13 @@ an [IndexOutOfBoundsException] should be thrownBy s.charAt(-1)
             <p>
               Exception messages
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 val thrown = the [IndexOutOfBoundsException] thrownBy s.charAt(-1)
 thrown.getMessage should equal ("String index out of range: -1")
             </code></pre>
 					</section>
 					<section>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 the [ArithmeticException] thrownBy 1 / 0 should have message "/ by zero"
 the [IndexOutOfBoundsException] thrownBy {
   s.charAt(-1)
@@ -732,7 +753,7 @@ the [IndexOutOfBoundsException] thrownBy {
             <p>
               MockitoSugar 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 // First, create the mock object
 val mockCollaborator = mock[Collaborator]
 
@@ -753,7 +774,7 @@ verify(mockCollaborator, times(2)).documentChanged("Document")
             <p>
               Inside
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 // For example, given the following case classes:
 case class Address(street: String, city: String, state: String, zip: String)
 case class Name(first: String, middle: String, last: String)
@@ -780,13 +801,16 @@ inside (rec) { case Record(name, address, age) =>
             <p>
               StreamlinedXml 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
-(xmlElem === <summer>
-  <day></day>
-  <night>
+            <pre><code data-trim contenteditable class="xml" >
+&lt;summer&gt;&lt;day&gt;&lt;/day&gt;&lt;night&gt;with lots of stars&lt;/night&gt;&lt;/summer&gt;
+            </code></pre>
+            <pre><code data-trim contenteditable class="xml" >
+xmlElem should eqaul (&lt;summer&gt;
+  &lt;day&gt;&lt;day&gt;
+  &lt;night&gt;
     with lots of stars
-  </night>
-</summer>) (after being streamlined[Elem])
+  &lt;night&gt;
+&lt;summer&gt;) (after being streamlined[Elem])
             </code></pre>
 					</section>
 				</section>
@@ -798,7 +822,7 @@ inside (rec) { case Record(name, address, age) =>
             <p>
               Nice equality 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import org.scalactic._
 import TripleEquals._
 import StringNormalizations._
@@ -811,7 +835,7 @@ import Explicitly._
             <p>
               Normalization
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import NormMethods._
 
 implicit val strNormalization = lowerCased
@@ -824,7 +848,7 @@ implicit val strNormalization = lowerCased
             <p>
               Implicit string equality
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 implicit val strEquality = decided by defaultEquality[String] afterBeing lowerCased
 
 "Hello" === "hello"                           // true
@@ -835,13 +859,13 @@ implicit val strEquality = decided by defaultEquality[String] afterBeing lowerCa
             <p>
               Tolerance
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import Tolerance._
 
 2.00001 === 2.0 +- 0.01                       // true
             </code></pre>
 
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 import TolerantNumerics._
 
 implicit val dblEquality = tolerantDoubleEquality(0.01)
@@ -853,7 +877,7 @@ implicit val dblEquality = tolerantDoubleEquality(0.01)
             <p>
               Type checked ===
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
  import TypeCheckedTripleEquals._
 
  Some("hi") === "hi"
@@ -868,7 +892,7 @@ implicit val dblEquality = tolerantDoubleEquality(0.01)
             <p>
               Or and Every
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 20px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 case class Person(name: String, age: Int)
 
 def parseName(input: String): String Or One[ErrorMessage] = {
@@ -879,19 +903,7 @@ def parseName(input: String): String Or One[ErrorMessage] = {
     Bad(One(s""""${input}" is not a valid name"""))
 }
 
-def parseAge(input: String): Int Or One[ErrorMessage] = {
-  try {
-    val age = input.trim.toInt
-    if (age >= 0) Good(age) else Bad(One(s""""${age}" is not a valid age"""))
-  }
-  catch {
-    case _: NumberFormatException =>
-      Bad(One(s""""${input}" is not a valid integer"""))
-  }
-}
-
 def parsePerson(inputName: String, inputAge: String): Person Or Every[ErrorMessage] = {
-
   val name = parseName(inputName)
   val age = parseAge(inputAge)
   withGood(name, age) { Person(_, _) }
@@ -902,7 +914,7 @@ def parsePerson(inputName: String, inputAge: String): Person Or Every[ErrorMessa
             <p>
               Using parsePerson 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 parsePerson("Bridget Jones", "29")
 // Result: Good(Person(Bridget Jones,29))
 
@@ -920,7 +932,7 @@ parsePerson("", "")
             <p>
               Snapshots - easy logging
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 val a = 1
 val b = '2'
 val c = "3"
@@ -947,7 +959,8 @@ snap(a, b, c) // Result: a was 1, b was '2', c was "3"
 		<img src="images/movio-logos.png" style="position: absolute; top: 20px; right: 20px;" border="0" />
 
 	<script src="lib/js/head.min.js"></script>
-	<script src="js/reveal.min.js"></script>
+	<!--<script src="js/reveal.min.js"></script>-->
+  <script src="js/reveal.js"></script>
 
 		<script>
 

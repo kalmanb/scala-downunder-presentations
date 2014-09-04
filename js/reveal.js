@@ -19,15 +19,15 @@ var Reveal = (function(){
 
 			// The "normal" size of the presentation, aspect ratio will be preserved
 			// when the presentation is scaled to fit different resolutions
-			width: 1300,
-			height: 900,
+			width: 1900,
+			height: 1000,
 
 			// Factor of the display size that should remain empty around the content
 			margin: 0.1,
 
 			// Bounds for smallest/largest possible scale to apply to content
 			minScale: 0.2,
-			maxScale: 2.0,
+			maxScale: 3.0,
 
 			// Display controls in the bottom right corner
 			controls: true,

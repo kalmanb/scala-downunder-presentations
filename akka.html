@@ -14,7 +14,8 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=no">
 
-		<link rel="stylesheet" href="css/reveal.min.css">
+		<!--<link rel="stylesheet" href="css/reveal.min.css">-->
+    <link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/movio.css" id="theme">
 
 		<!-- For syntax highlighting -->
@@ -59,11 +60,12 @@
 * Mailbox
 * Single Threaded
 * Can maintain state
+* Sheilds mutability
 * Untyped
             </script>
 			    </section>
 			   	<section>
-             <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+             <pre><code data-trim contenteditable class="scala" >
 class MyActor extends Actor {
   def receive = {
     case "test"            => println("received string: test")
@@ -78,7 +80,7 @@ class MyActor extends Actor {
             <p>
               Interacting with Actors
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala">
 val myActor = system.actorOf(Props(new MyActor(constructorParam)))
 
 // Tell
@@ -97,7 +99,7 @@ val person: Future[Person] = (myActor ? "select * from person;").mapTo[Person]
             <p>
               Don't block actors - (full mail boxes)
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala">
 class BlockingExample extends Actor {
 
   def receive = {
@@ -117,7 +119,7 @@ class BlockingExample extends Actor {
             <p>
               Ask Example
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala">
 class AskExample(otherActor: ActorRef) extends Actor {
   implicit val dispatcher = context.dispatcher
   implicit val timeout = Timeout(5 seconds)
@@ -138,7 +140,7 @@ class AskExample(otherActor: ActorRef) extends Actor {
             <p>
               Tell Example
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 class TellExample(otherActor: ActorRef) extends Actor {
 
   implicit val dispatcher = context.dispatcher
@@ -190,7 +192,7 @@ class TellExample(otherActor: ActorRef) extends Actor {
             <p>
               Example
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 akka.actor.deployment {
   /parent/router1 {
     router = round-robin-pool
@@ -199,7 +201,7 @@ akka.actor.deployment {
 }
             </code></pre>
             <p></p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 val router: ActorRef = context.actorOf(FromConfig.props(Props[Worker]), "router1")
             </code></pre>
 					</section>
@@ -207,7 +209,7 @@ val router: ActorRef = context.actorOf(FromConfig.props(Props[Worker]), "router1
             <p>
               Resizable
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 akka.actor.deployment {
   /parent/router1 {
     router = round-robin-pool
@@ -219,12 +221,6 @@ akka.actor.deployment {
   }
 }
             </code></pre>
-					</section>
-					<section data-markdown>
-            <script type="text/template">
-### Cool Stuff
-* BYO
-            </script>
 					</section>
 				</section>
 				<section>
@@ -255,7 +251,7 @@ akka.actor.deployment {
             <p>
               Messages
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 final case class StatsJob(text: String)
 final case class StatsResult(meanWordLength: Double)
 final case class JobFailed(reason: String)
@@ -265,7 +261,7 @@ final case class JobFailed(reason: String)
             <p>
               Worker to count characters in each word
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 class StatsWorker extends Actor {
   var cache = Map.empty[String, Int]
   def receive = {
@@ -287,7 +283,7 @@ class StatsWorker extends Actor {
             <p>
               StatService - recieve text, split into words, sends to workers
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 class StatsService extends Actor {
   val workerRouter = context.actorOf(FromConfig.props(Props[StatsWorker]),
     name = "workerRouter")
@@ -315,7 +311,7 @@ class StatsService extends Actor {
             <p>
               Aggregation - average counts from all workers
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 class StatsAggregator(expectedResults: Int, replyTo: ActorRef) extends Actor {
   var results = IndexedSeq.empty[Int]
   context.setReceiveTimeout(3 seconds)
@@ -344,7 +340,7 @@ class StatsAggregator(expectedResults: Int, replyTo: ActorRef) extends Actor {
             <p>
               Cluster Config
             </p>
-            <pre><code data-trim contenteditable style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable >
 akka.actor.deployment {
   /statsService/workerRouter {
     router = consistent-hashing-group
@@ -377,7 +373,7 @@ akka.actor.deployment {
               Cluster Singleton Manager
               Started on each node
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 system.actorOf(ClusterSingletonManager.props(
   singletonProps = Props[StatsService],
   singletonName = "statsService",
@@ -391,7 +387,7 @@ system.actorOf(ClusterSingletonManager.props(
               Proxy - keeps track of singleton - StatsService
               Started on each node
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 system.actorOf(ClusterSingletonProxy.props(
   singletonPath = "/user/singleton/statsService",
   role = Some("compute")),
@@ -402,7 +398,7 @@ system.actorOf(ClusterSingletonProxy.props(
             <p>
               Router configuration 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 akka.actor.deployment {
   /singleton/statsService/workerRouter {
     router = consistent-hashing-pool
@@ -433,7 +429,7 @@ akka.actor.deployment {
             <p>
               Event Bus 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 class AppActorEventBus extends ActorEventBus with LookupClassification {
 
   ...
@@ -452,7 +448,7 @@ class AppActorEventBus extends ActorEventBus with LookupClassification {
             <p>
               Subscribe to Events 
             </p>
-            <pre><code data-trim contenteditable class="scala" style="font-size: 22px; margin-top: 20px;">
+            <pre><code data-trim contenteditable class="scala" >
 val system = ActorSystem("MySystem")
 val appActorEventBus = new AppActorEventBus
 
@@ -478,7 +474,7 @@ appActorEventBus.publish(MessageEvent("/posts/new", "hello world"))
             <p>PULLIING it all together</p>
 					</section>
           <section>
-            <img src="img/movio-actors.png" width="1000" border="0"/>
+            <img src="img/movio-actors.png" width="1200" border="0"/>
           </section>
 				</section>
 				<section>
@@ -493,12 +489,8 @@ appActorEventBus.publish(MessageEvent("/posts/new", "hello world"))
 					</section>
 				</section>
 				<section>
-					<h1>TODO</h1>
-          * Clean up logging
-          * Clean up vim colours
-          * Supervision
-          * Delivery Reliability
-          * Dispatchers
+					<h1>Dispatchers</h1>
+          <p>...</p>
 				</section>
 				<section data-markdown>
             <script type="text/template">
@@ -522,7 +514,8 @@ appActorEventBus.publish(MessageEvent("/posts/new", "hello world"))
 		<img src="images/movio-logos.png" style="position: absolute; top: 20px; right: 20px;" border="0" />
 
 	<script src="lib/js/head.min.js"></script>
-	<script src="js/reveal.min.js"></script>
+	<!--<script src="js/reveal.min.js"></script>-->
+  <script src="js/reveal.js"></script>
 
 		<script>
 

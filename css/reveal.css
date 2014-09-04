@@ -336,8 +336,11 @@ body {
 .reveal pre code {
 	padding: 5px;
 	overflow: auto;
-	max-height: 700px;
+	/*max-height: 800px;*/
 	word-wrap: normal;
+  font-size: 30px; 
+  line-height: 130%;
+  margin-top: 20px;
 }
 .reveal pre.stretch code {
 	height: 100%;
