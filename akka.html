@@ -104,13 +104,7 @@ class BlockingExample extends Actor {
 
   def receive = {
     case 'Request ⇒
-      Try {
-        DB.selectQuery("select * from person;")
-      } match {
-        case Success(person) ⇒ println(s"Person is $person")
-        case Failure(e)      ⇒ println(s"oh no: $e")
-      }
-      context stop self
+        ... some long waiting process
   }
 }
             </code></pre>
