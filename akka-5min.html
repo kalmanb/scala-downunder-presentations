@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Scala Downunder - Akka</title>
+
+    <meta name="description" content="ScalaTest">
+    <meta name="author" content="Kalman Bekes">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=no">
+
+    <!--<link rel="stylesheet" href="css/reveal.min.css">-->
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/movio.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <!--<link rel="stylesheet" href="lib/css/zenburn.css">-->
+    <!--<link rel="stylesheet" href="lib/css/solarized_dark.css">-->
+    <link rel="stylesheet" href="lib/css/monokai_sublime.css">
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+        <h1>Akka</h1>
+        <br><br>
+        <h4>... in 5 mins</h4>
+        </section>
+
+        <section>
+        <section>
+        <p>Anatomy of an Actor</p>
+        <img src="img/actor.png" width="800" border="0"/>
+        </section>
+        <section data-markdown>
+        <script type="text/template">
+* Mailbox
+* Single Threaded
+* Can maintain state
+* Sheilds mutability
+        </script>
+        </section>
+        <section>
+        <pre><code data-trim contenteditable class="scala" >
+class MyActor extends Actor {
+  def receive = {
+    case "test"            => println("received string: test")
+    case s: String         => println(s"received string: $s")
+    case Person(name, age) => println(s"received $name of who is $age years old")
+    case _                 => println("received unknown message")
+  }
+}
+             </code></pre>
+        </section>
+        <section>
+        <p>Tell</p>
+        <pre><code data-trim contenteditable class="scala" >
+val myActor = system.actorOf(Props(new MyActor(constructorParam)))
+
+myActor ! "test"              // Send string 
+myActor ! "any string"        // Send string
+myActor ! Person("kal", 37)   // Send Person
+            </code></pre>
+        <p>Ask</p>
+        <pre><code data-trim contenteditable class="scala">
+val person: Future[Person] = (myActor ? "select * from person;").mapTo[Person]
+            </code></pre>
+        </section>
+        </section>
+        <section>
+        <section>
+        <h1>Routing</h1>
+        <p>
+        </p>
+        </section>
+        <section>
+        <img src="img/router.png" border="0"/>
+        </section>
+        <section data-markdown>
+        <script type="text/template">
+          ### Router Types
+          * Round Robin
+          * Random
+          * Smallest Mailbox
+          * Balancing Pool - shared mailbox
+          * Broadcast
+          * Scatter Gather First
+          * Tail Chopping
+          * Consisent Hashing
+          * BYO
+        </script>
+        </section>
+        <section>
+        <p>
+        Router Config
+        </p>
+        <pre><code data-trim contenteditable class="scala" >
+val router = context.actorOf(FromConfig.props(Props[Worker]), "router1")
+            </code></pre>
+        <p></p>
+        <pre><code data-trim contenteditable class="scala" >
+akka.actor.deployment {
+  /parent/router1 {
+    router = round-robin-pool
+    resizer {
+      lower-bound = 2
+      upper-bound = 15
+      messages-per-resize = 100
+    }
+  }
+}
+            </code></pre>
+        </section>
+        </section>
+        <section>
+        <h1>Supervision</h1>
+        <p>Parents supervise their children</p>
+        </section>
+        <section>
+        <h1>Dispatchers</h1>
+        <p>Underlying thread pools</p>
+        <p>Configurable at runtime</p>
+        </section>
+        <section>
+        <p>Movio Email Delivery</p>
+        <img src="img/movio-actors.png" width="1200" border="0"/>
+        </section>
+        <section data-markdown>
+        <script type="text/template">
+          # Next Steps
+          * http://akka.io/ - best documentation
+          * https://github.com/kalmanb/akka-examples
+        </script>
+        </section>
+      </div>
+    </div>
+
+
+    <img src="images/movio-logos.png" style="position: absolute; top: 20px; left: 20px;" border="0" />
+    <div class="footer" style="position: absolute; top: 30px; right: 25px;">
+      <a href="https://twitter.com/kalmanb" target=_blank" style="color: white;">@kalmanb</a>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <!--<script src="js/reveal.min.js"></script>-->
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+        { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'plugin/highlight/highlight.pack.js', async: true, callback: function() { 
+            hljs.configure({
+
+            })
+            hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+            });
+
+          </script>
+
+        </body>
+      </html>
