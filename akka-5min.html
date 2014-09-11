@@ -67,10 +67,7 @@
         <pre><code data-trim contenteditable class="scala" >
 class MyActor extends Actor {
   def receive = {
-    case "test"            => println("received string: test")
-    case s: String         => println(s"received string: $s")
-    case Person(name, age) => println(s"received $name of who is $age years old")
-    case _                 => println("received unknown message")
+    case s: String => println(s"received string: $s")
   }
 }
              </code></pre>
@@ -81,8 +78,6 @@ class MyActor extends Actor {
 val myActor = system.actorOf(Props(new MyActor(constructorParam)))
 
 myActor ! "test"              // Send string 
-myActor ! "any string"        // Send string
-myActor ! Person("kal", 37)   // Send Person
             </code></pre>
         <p>Ask</p>
         <pre><code data-trim contenteditable class="scala">
@@ -159,7 +154,7 @@ akka.actor.deployment {
     </div>
 
 
-    <img src="images/movio-logos.png" style="position: absolute; top: 20px; left: 20px;" border="0" />
+    <img src="images/movio-logo.png" style="position: absolute; top: 23px; left: 30px;" border="0" />
     <div class="footer" style="position: absolute; top: 30px; right: 25px;">
       <a href="https://twitter.com/kalmanb" target=_blank" style="color: white;">@kalmanb</a>
     </div>
